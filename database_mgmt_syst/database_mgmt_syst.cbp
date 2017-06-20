@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="database_mgmt_syst" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/database_mgmt_syst" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/database_mgmt_syst" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="buffer_manager.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="buffer_manager.h" />
+		<Unit filename="disk_space_manager.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="disk_space_manager.h" />
+		<Unit filename="file_manager.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="file_manager.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="page.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="page.h" />
+		<Unit filename="record.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="record.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
