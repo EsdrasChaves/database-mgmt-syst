@@ -64,35 +64,35 @@
 	"page.h"
 	"file_manager.h"
 
-1497924386 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/buffer_manager.c
+1497938429 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/buffer_manager.c
 	"buffer_manager.h"
 	<string.h>
 	<stdlib.h>
 
-1497924386 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/buffer_manager.h
+1497938599 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/buffer_manager.h
 	<stdio.h>
 	"disk_space_manager.h"
 	"page.h"
 	"file_manager.h"
 
-1497924386 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/disk_space_manager.h
+1497924569 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/disk_space_manager.h
 	"page.h"
 
-1497924386 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/page.h
+1497924569 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/page.h
 	"record.h"
 
-1497924386 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/record.h
+1497924569 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/record.h
 
-1497924386 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/file_manager.h
+1497924569 /home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/file_manager.h
 	<stdio.h>
 	<stdlib.h>
 
-1497924386 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/disk_space_manager.c
+1497929122 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/disk_space_manager.c
 	<stdio.h>
 	<stdlib.h>
 	"disk_space_manager.h"
 
-1497924386 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/file_manager.c
+1497924569 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/file_manager.c
 	"file_manager.h"
 	"disk_space_manager.h"
 
@@ -103,12 +103,12 @@
 	"buffer_manager.h"
 	"disk_space_manager.h"
 
-1497924386 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/page.c
+1497924569 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/page.c
 	"page.h"
 	<stdio.h>
 	<stdlib.h>
 
-1497924386 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/record.c
+1497924569 source:/home/esdraschaves/Documentos/Trabalho/database-mgmt-syst/database_mgmt_syst/record.c
 	<string.h>
 	<stdio.h>
 	"record.h"

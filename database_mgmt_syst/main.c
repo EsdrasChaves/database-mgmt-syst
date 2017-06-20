@@ -10,6 +10,12 @@ void init() {
     newDiskSpaceManager();
 }
 
+void close() {
+    bufferpool_persist();
+    dsm_save();
+    ///fm_save();
+}
+
 int main()
 {
    /// printf("INICIALIZANDO DB...\n\n");
@@ -165,6 +171,8 @@ int main()
     remove_record(pg,0);
     imprime_bitmap(pg);
 */
+
+/// close();
 
     return 0;
 }

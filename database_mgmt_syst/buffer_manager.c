@@ -180,6 +180,9 @@ int add_page_memory(Frame_info* frameAux, int disk_block) {
 
 // Salva página no disco (métodos do dsm) e atualiza dados do frame_info
 int save_page(Frame_info* frameAux) {
+    if(*(frameAux->frame) == NULL)
+        return 0;
+
     write_block((*(frameAux->frame)), (frameAux->disk_block));
 
     frameAux->dirt_bit = 0;
@@ -271,6 +274,10 @@ int req_record(Page* page, int chave) {
 }
 
 
-
+void bufferpool_persist () {
+    int i;
+    for(i=0 ; i < MEM_SIZE; i++)
+        save_page(&(bufferpool_manager->frame_info[i]));
+}
 
 // Função de retornar registro;
