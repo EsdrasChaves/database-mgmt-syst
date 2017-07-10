@@ -29,6 +29,9 @@ int cr8_record(Record* rcd, int heap_id);
 int rmv_record(int heap_file_id, int page_id, int chave);
 
 
+
+int read_page(int heap_file_id, int page_id);
+
 // Atualiza registro é necessário buscar para ver a diferença
 int update_record(int heap_file_id, int page_id, int chave, Record* record);
 

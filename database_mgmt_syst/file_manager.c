@@ -25,8 +25,11 @@ void printFile() {
         printf("HEAP: %d\n", i++);
         while(dp_aux != NULL) {
             printf("Pagina %d\n", dp_aux->page_id);
+            read_page(hp_aux->heap_id, dp_aux->page_id);
+            printf("\n");
             dp_aux = dp_aux->next;
         }
+        printf("\n\n");
         hp_aux = hp_aux->next;
     }
 }

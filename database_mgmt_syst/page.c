@@ -88,11 +88,12 @@ int num_slot_key(Page* pg, int chave) {
 void imprimeRecords(Page *page){
     Record* rec;
     int i;
+    printf("Page ID = %d\n", page->id);
     for(i=0;i<4;i++){
         rec = page->slots[i];
-        if(rec != NULL)imprimeInfo(rec);
-        else printf("NULL\n");
+        if(page->bitmap_slots[i] == 1)imprimeInfo(rec);
     }
+    //imprime_bitmap(page);
 }
 Record** getSlots(Page *p){
     return p->slots;

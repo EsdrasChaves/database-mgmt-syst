@@ -118,8 +118,8 @@ Page* read_block(int disk_block){
 
 int write_block(Page* page, int disk_block){
     FILE *f;
-    f = fopen(ARQUIVO_DADOS, "ab");
-    fseek(f,(get_size_page()+4*get_size_record())*disk_block,SEEK_SET);
+    f = fopen(ARQUIVO_DADOS, "r+b");
+    fseek(f,(get_size_page()+4*get_size_record())*disk_block,0);
     fwrite(page, get_size_page(),1,f);
     int i;
     struct record **aux_rc;
@@ -135,6 +135,44 @@ int write_block(Page* page, int disk_block){
     fclose(f);
     return 1;
 }
+
+/*int write_block(Page* page, int disk_block){
+    FILE *f, *f1;
+    Page* aux;
+
+    f = fopen(ARQUIVO_DADOS, "rb");
+    f1 = fopen("aux.bin", "wb");
+    int j = 0, i;
+    struct record **aux_rc;
+    char c =
+    while(!EOF) {
+        if(j == disk_block) {
+            fwrite(page, get_size_page(),1,f1);
+            aux_rc = get_record(page);
+            fseek(f,(get_size_page()+4*get_size_record())*(disk_block+1),0);
+        } else {
+            aux = read_block(j);
+            fwrite(aux, get_size_page(),1,f1);
+            aux_rc = get_record(aux);
+        }
+        for(i=0;i<4;i++){
+            if(aux_rc[i] != NULL){
+                fwrite(aux_rc[i],get_size_record(),1,f1);
+            }
+            else{
+                fseek(f1,get_size_record(),SEEK_CUR);
+            }
+        }
+        j++;
+    }
+
+    fclose(f);
+    fclose(f1);
+
+    remove("DSM-Dados.bin");
+    rename("aux.bin", "DSM-Dados.bin");
+    return 1;
+}*/
 int free_block(int block_address){
     diskSpaceManager->blocks_info[block_address].is_free = 1;
 }

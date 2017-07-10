@@ -4,7 +4,7 @@
 Page** primary_memory;
 
 // Numero de paginas na memoria
-#define MEM_SIZE 10
+#define MEM_SIZE 2
 #include <stdlib.h>
 
 
@@ -151,7 +151,7 @@ int cr8_record(Record* rcd, int heap_id) {
 
     if(frameAux != NULL) {
         inst_record(*(frameAux->frame), rcd);
-        update_free_space(heap_id, 0, -1);
+        update_free_space(heap_id, get_id(*(frameAux->frame)), -1);                     // AKI PODE TER UM ERRO
     }
     else
         return 0;
@@ -159,6 +159,7 @@ int cr8_record(Record* rcd, int heap_id) {
     frameAux->dirt_bit = 1;
     frameAux->referenced_bit = 0;
     frameAux->pin_count = 0;
+
 
 
     return 1;
@@ -218,6 +219,19 @@ int rmv_record(int heap_file_id, int page_id, int chave) {
     return 0;
 }
 
+int read_page(int heap_file_id, int page_id) {
+    Frame_info* frameAux;
+
+    frameAux = check_page(heap_file_id, page_id);
+
+    if(frameAux != NULL) {
+        imprimeRecords(*(frameAux->frame));
+        return 1;
+    }
+
+    imprime_bitmap(frameAux->frame);
+    return 0;
+}
 
 int update_record(int heap_file_id, int page_id, int chave, Record* record) {
     Frame_info* frameAux;

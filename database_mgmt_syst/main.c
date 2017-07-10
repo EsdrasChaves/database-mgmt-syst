@@ -52,7 +52,9 @@ void imprime_menu() {
 
 int main()
 {
-    int escolha = -1, heap, id, page_id;
+
+
+    int escolha = -1, heap, id, page_id, id_aux;
     char nome[10];
     Record* rcd;
 
@@ -70,8 +72,10 @@ int main()
         switch(escolha) {
             case 0:
                 system("clear");
+                /*printFile();
                 printf("Pressione qualquer enter para sair\n");
-                getchar();
+                getchar();*/
+                close();
                 break;
             case 1:
                 heap = cr8_heapfile();
@@ -83,7 +87,7 @@ int main()
                 break;
             case 2:
                 system("clear");
-                printf("Qual o id da tabela em que deseja inserir? ", heap);
+                printf("Qual o id da tabela em que deseja inserir? ");
                 scanf("%d", &heap);
                 printf("Digite o id do registro: ");
                 scanf("%d", &id);
@@ -100,7 +104,7 @@ int main()
                 break;
             case 3:
                 system("clear");
-                printf("Qual o id da tabela em que deseja remover? ", heap);
+                printf("Qual o id da tabela em que deseja remover? ");
                 scanf("%d", &heap);
                 printf("Digite a chave do registro: ");
                 scanf("%d", &id);
@@ -113,10 +117,10 @@ int main()
                 break;
             case 4:
                 system("clear");
-                printf("Qual o id da tabela em que deseja remover? ", heap);
+                printf("Qual o id da tabela em que deseja atualizar? ");
                 scanf("%d", &heap);
                 printf("Digite a chave do registro: ");
-                scanf("%d", &id);
+                scanf("%d", &id_aux);
                 printf("Digite o id da pagina: ");
                 scanf("%d", &page_id);
                 printf("Digite o id do registro: ");
@@ -127,13 +131,15 @@ int main()
                 fgets(nome, 10, stdin);
                 rcd = recordNew();
                 insereInfo(rcd, id, nome);
-                update_record(heap, page_id, id, rcd);
+                update_record(heap, page_id, id_aux, rcd);
                 printf("Removido com sucesso...\n");
                 getchar();
                 system("clear");
                 break;
             case 5:
                 system("clear");
+
+
                 printMem();
                 getchar();
                 getchar();
