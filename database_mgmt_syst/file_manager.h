@@ -19,6 +19,9 @@ int update_free_space(int heap_id, int page_id, int num_update);
 /// Criar nova tabela
 int cr8_heapfile();
 
+/// Salva as informações do file manager
+int fm_save();
+
 /// Carrega informações do file manager
 int fm_load(void);
 

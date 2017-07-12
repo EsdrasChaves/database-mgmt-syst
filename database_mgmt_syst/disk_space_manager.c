@@ -89,6 +89,12 @@ Page* read_block(int disk_block){
     setSlots(rec,page);
     int i,*bitmap;
     bitmap = get_bitmap(page);
+    if(!feof(f))
+        for(i=0; i<4;i++) {
+            fscanf(f,"%d", &bitmap[i]);
+            printf("%d\n", bitmap[i]);
+        }
+
     for(i=0;i<4;i++){
         if(bitmap[i]==1){
             bitmap[i]=0;
@@ -124,6 +130,11 @@ int write_block(Page* page, int disk_block){
     int i;
     struct record **aux_rc;
     aux_rc = get_record(page);
+
+    int *bitmap = get_bitmap(page);
+    for(i=0; i<4; i++) {
+        fprintf(f, "%d", bitmap[i]);
+    }
     for(i=0;i<4;i++){
         if(aux_rc[i] != NULL){
             fwrite(aux_rc[i],get_size_record(),1,f);

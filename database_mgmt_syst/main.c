@@ -6,16 +6,11 @@
 #include "disk_space_manager.h"
 
 void init() {
-    bf_init();
     initHeap();
+    bf_init();
     newDiskSpaceManager();
 }
 
-void close() {
-    bufferpool_persist();
-    dsm_save();
-    ///fm_save();
-}
 
 void imprime_boasVindas() {
     printf(" ---------------------------------------------------------\n");
@@ -50,8 +45,7 @@ void imprime_menu() {
 
 }
 
-int main()
-{
+int main(){
 
 
     int escolha = -1, heap, id, page_id, id_aux;
@@ -72,10 +66,14 @@ int main()
         switch(escolha) {
             case 0:
                 system("clear");
-                /*printFile();
+                printFile();
                 printf("Pressione qualquer enter para sair\n");
-                getchar();*/
-                close();
+                getchar();
+                printf("Zegzo");
+                bufferpool_persist();
+                dsm_save();
+                printf("ola");
+                fm_save();
                 break;
             case 1:
                 heap = cr8_heapfile();
@@ -138,8 +136,6 @@ int main()
                 break;
             case 5:
                 system("clear");
-
-
                 printMem();
                 getchar();
                 getchar();

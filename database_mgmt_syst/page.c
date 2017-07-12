@@ -21,6 +21,13 @@ Record **get_record(Page *pg){
 Page *pageNew(int id, int heap_id) {
     Page *pg = (Page*) malloc(sizeof(Page));
     pg->slots = (Record**)malloc(NUM_SLOTS*sizeof(Record*));
+
+
+    int i;
+    for(i=0;i<NUM_SLOTS; i++)
+        pg->slots[i] = NULL;
+
+
     pg->bitmap_slots = (int*) calloc(NUM_SLOTS,sizeof(int));
     pg->num_slots = NUM_SLOTS;
     pg->id = id;
