@@ -51,6 +51,12 @@ int  bf_init(/*int num_frames*/) {
     return 1;
 }
 
+void free_bpm() {
+    free(primary_memory);
+    free(bufferpool_manager->frame_info);
+    free(bufferpool_manager);
+}
+
 void printMem() {
     int i;
     for(i=0; i<MEM_SIZE; i++) {
@@ -58,6 +64,7 @@ void printMem() {
             printf("FRAME %d:\n", i);
             imprime_bitmap(*(bufferpool_manager->frame_info[i].frame));
         }
+        printf("\n");
     //imprime_bitmap(primary_memory[0]);
     //imprime_bitmap(primary_memory[1]);
     }
@@ -310,8 +317,20 @@ void bufferpool_persist () {
     int i;
     for(i=0 ; i < MEM_SIZE; i++)
         save_page(&(bufferpool_manager->frame_info[i]));
+    free_bpm();
 }
 
 // Função de retornar registro;
 
+int delete_page(int page_id) {
+    int i;
 
+    for(i=0; i < MEM_SIZE; i++) {
+        if(page_id == get_id((*(bufferpool_manager->frame_info[i].frame)))) {
+            free(&(bufferpool_manager->frame_info[i]));
+            *((bufferpool_manager->frame_info)[i].frame) = NULL;
+            return 1;
+        }
+    }
+    return 0;
+}

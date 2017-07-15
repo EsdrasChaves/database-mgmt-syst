@@ -31,9 +31,6 @@ void imprime_boasVindas() {
     printf("|\t\t\t\t\t\t\t  |\n");
     printf(" ---------------------------------------------------------\n");
 
-    printf("\nOBS: O sistema esta com um problema para recuperar alguns dados dos arquivos\n");
-    printf("\nPortanto, antes de iniciar a aplicação novamente deve-se apagar o conteúdo\ndo arquivo \"DSM-DADOS.bin\" E substituir os valores \'0\' para \'1\' no arquivo \n\"DiskSpaceManager.txt\" ");
-
     printf("\n\n\n\tPressione enter tecla para continuar...\n");
 }
 
@@ -47,6 +44,8 @@ void imprime_menu() {
     printf("6 - Buscar registro pelo Nome\n");
     printf("7 - Buscar registro pelo RID\n");
     printf("8 - Imprimir paginas presentes na memoria\n");
+    printf("9 - Scan Completo\n");
+    printf("10 - Deletar tabela\n");
     printf("0 - Sair\n");
     printf("\n\nEscolha: ");
 
@@ -68,25 +67,21 @@ int main()
     init();
 
     while(escolha != 0) {
+        system("clear");
         imprime_menu();
         scanf("%d", &escolha);
-
+        system("clear");
         switch(escolha) {
             case 0:
-                system("clear");
-                printFile();
                 close();
                 break;
             case 1:
                 heap = cr8_heapfile();
-                system("clear");
                 printf("Tabela Criada\nID = %d\n", heap);
                 getchar();
                 getchar();
-                system("clear");
                 break;
             case 2:
-                system("clear");
                 printf("Qual o id da tabela em que deseja inserir? ");
                 scanf("%d", &heap);
                 printf("Digite o id do registro: ");
@@ -100,10 +95,8 @@ int main()
                 cr8_record(rcd, heap);
                 printf("Inserido com sucesso...\n");
                 getchar();
-                system("clear");
                 break;
             case 3:
-                system("clear");
                 printf("Qual o id da tabela em que deseja remover? ");
                 scanf("%d", &heap);
                 printf("Digite a chave do registro: ");
@@ -113,10 +106,9 @@ int main()
                 rmv_record(heap, page_id, id);
                 printf("Removido com sucesso...\n");
                 getchar();
-                system("clear");
+                getchar();
                 break;
             case 4:
-                system("clear");
                 printf("Qual o id da tabela em que deseja atualizar? ");
                 scanf("%d", &heap);
                 printf("Digite a chave do registro: ");
@@ -132,9 +124,8 @@ int main()
                 rcd = recordNew();
                 insereInfo(rcd, id, nome);
                 update_record(heap, page_id, id_aux, rcd);
-                printf("Removido com sucesso...\n");
+                printf("Atualizado com sucesso...\n");
                 getchar();
-                system("clear");
                 break;
             case 5:
                 printf("Digite o Heap ID da tabela: ");
@@ -142,6 +133,8 @@ int main()
                 printf("Digite o ID da tupla: ");
                 scanf("%d", &record_id);
                 search_by_id(heap, record_id);
+                getchar();
+                getchar();
                 break;
             case 6:
                 printf("Digite o Heap ID da tabela: ");
@@ -150,6 +143,7 @@ int main()
                 printf("Digite o nome da tupla: ");
                 fgets(nome, 10, stdin);
                 search_by_name(heap, nome);
+                getchar();
                 break;
             case 7:
                 printf("Digite o Heap ID da tabela: ");
@@ -159,15 +153,28 @@ int main()
                 printf("Digite o ID da tupla: ");
                 scanf("%d", &record_id);
                 search_by_rid(heap, page_id, record_id);
+                getchar();
+                getchar();
                 break;
             case 8:
-                system("clear");
                 printMem();
                 getchar();
                 getchar();
                 break;
+            case 9:
+                printFile();
+                getchar();
+                getchar();
+                break;
+            case 10:
+                printf("Digite o Heap ID da tabela: ");
+                scanf("%d", &heap);
+                delete_table(heap);
+                printf("Chama\n");
+                getchar();
             default:
                 printf("Opcao invalida\n");
+                getchar();
         }
     }
 

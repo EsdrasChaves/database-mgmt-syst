@@ -56,3 +56,5 @@ int req_record_page(int heap_file_id, int page_id, int chave);
 int req_record(Page* page, int chave);
 
 void bufferpool_persist ();
+
+int delete_page(int page_id);

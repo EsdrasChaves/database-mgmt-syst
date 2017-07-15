@@ -12,7 +12,7 @@ int* used_heaps_ids;
 Heap_dictionary* HEAP;
 
 int initHeap();
-
+int fm_save();
 /// Atualiza numero de slots livres
 int update_free_space(int heap_id, int page_id, int num_update);
 

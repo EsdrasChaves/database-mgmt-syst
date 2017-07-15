@@ -3,6 +3,7 @@
 
 #define ARQUIVO_HEAP "heap_file.txt"
 #define ARQUIVO_DIRECTORY "directory_file.txt"
+#define ARQUIVO_USED "used_file.txt"
 
 struct directory_pages{
     int page_id;
@@ -22,10 +23,9 @@ struct heap_dictionary{
 void printFile() {
     Heap_dictionary* hp_aux = HEAP;
     Directory_pages* dp_aux = NULL;
-    int i = 0;
     while(hp_aux != NULL) {
         dp_aux = hp_aux->header_page;
-        printf("HEAP: %d\n", i++);
+        printf("HEAP: %d\n", hp_aux->heap_id);
         while(dp_aux != NULL) {
             printf("Pagina %d\n", dp_aux->page_id);
             read_page(hp_aux->heap_id, dp_aux->page_id);
@@ -34,6 +34,70 @@ void printFile() {
         }
         printf("\n\n");
         hp_aux = hp_aux->next;
+    }
+}
+
+int delete_table(int heap_id) {
+    Heap_dictionary* hp_aux_begin = HEAP, *hp_aux_last = HEAP;
+    Directory_pages* dir_aux = NULL;
+
+    while(hp_aux_begin != NULL) {
+        if(hp_aux_begin->heap_id == heap_id) {
+            if(hp_aux_begin->header_page != NULL){
+                dir_aux = hp_aux_begin->header_page->next;
+                while(dir_aux != NULL) {
+                    delete_page(dir_aux->page_id);
+                    free_block(dir_aux->disk_block);
+                    free(HEAP->header_page);
+                    HEAP->header_page = dir_aux;
+                    dir_aux = dir_aux->next;
+                }
+            }
+
+            if(hp_aux_begin == HEAP) {
+                HEAP = HEAP->next;
+                free(hp_aux_begin);
+                used_heaps_ids[heap_id] = 0;
+                return 1;
+            }else {
+                hp_aux_last->next = hp_aux_begin->next;
+                free(hp_aux_begin);
+                used_heaps_ids[heap_id] = 0;
+                return 1;
+            }
+        } else {
+            hp_aux_last = hp_aux_begin;
+            hp_aux_begin = hp_aux_begin->next;
+        }
+
+
+    }
+
+
+    return 0;
+
+}
+void free_fm() {
+    Heap_dictionary* heap_aux;
+    Directory_pages* dir_aux;
+
+    if(HEAP != NULL) {
+        heap_aux = HEAP->next;
+        while(heap_aux != NULL) {
+            if(HEAP->header_page != NULL) {
+                dir_aux = HEAP->header_page->next;
+                while(dir_aux != NULL) {
+                    free(HEAP->header_page);
+                    HEAP->header_page = dir_aux;
+                    dir_aux = dir_aux->next;
+                }
+            }
+
+
+            free(HEAP);
+            HEAP = heap_aux;
+            heap_aux = heap_aux->next;
+        }
     }
 }
 
@@ -269,14 +333,18 @@ int initHeap() {
 
 int fm_save()
 {
-    int count,aux;
+    int count,aux, i;
 
     FILE *arq_heap = fopen(ARQUIVO_HEAP,"w");
     FILE *arq_directory = fopen(ARQUIVO_DIRECTORY,"w");
+    FILE *arq_used_heap = fopen(ARQUIVO_USED,"w");
 
     Directory_pages *directory_aux;
 
     Heap_dictionary *heap_aux = HEAP;
+
+
+
     while(heap_aux!=NULL)
     {
         count = 0;
@@ -302,8 +370,14 @@ int fm_save()
         heap_aux = heap_aux->next ;
     }
 
+    for(i=0; i < MAX_HEAP_ID_SIZE; i++) {
+        fprintf(arq_used_heap, "%d\n", used_heaps_ids[i]);
+    }
+
     fclose(arq_directory);
     fclose(arq_heap);
+    fclose(arq_used_heap);
+    free_fm();
     return 1;
 }
 
@@ -342,10 +416,16 @@ int fm_load() {
     int count, i, aux,hp_id = 0,a;
     int pg_id,disk_block,free_space;
 
+
     FILE *arq_heap = fopen(ARQUIVO_HEAP,"r");
     FILE *arq_directory = fopen(ARQUIVO_DIRECTORY,"r");
+    FILE *arq_used_heap = fopen(ARQUIVO_USED,"r");
 
     Directory_pages *directory_aux;
+
+
+
+
 
     fscanf(arq_heap,"%d",&hp_id);
 
@@ -358,10 +438,6 @@ int fm_load() {
             fscanf(arq_directory,"%d",&pg_id);
             fscanf(arq_directory,"%d",&disk_block);
             fscanf(arq_directory,"%d",&free_space);
-
-            printf("%d",pg_id);
-            scanf("%d",&a);
-
             cr8_page_directory_load(hp_id,pg_id,disk_block,free_space);
 
         }
@@ -369,8 +445,16 @@ int fm_load() {
         hp_id++;
         fscanf(arq_heap,"%d",&hp_id);
     }
+
+    for(i=0; i < MAX_HEAP_ID_SIZE; i++) {
+        fscanf(arq_used_heap, "%d", &used_heaps_ids[i]);
+        printf("%d\n", used_heaps_ids[i]);
+    }
+
+
     fclose(arq_directory);
     fclose(arq_heap);
+    fclose(arq_used_heap);
 
     return 1;
 }
