@@ -19,7 +19,7 @@ struct disk_space_manager{
 void newDiskSpaceManager(){
     diskSpaceManager = malloc(sizeof(Disk_space_manager*));
     dsm_init(&diskSpaceManager,DISK_SPACE);
-    //dsm_load();
+    dsm_load();
 
 }
 
@@ -75,7 +75,7 @@ int cr8_block(){
     return page;
 }*/
 
-Page* read_block(int disk_block){
+/*Page* read_block(int disk_block){
     FILE *f;
     Page* page;
     Record* rc;
@@ -83,18 +83,103 @@ Page* read_block(int disk_block){
     page = pageNew();
     f = fopen(ARQUIVO_DADOS,"rb");
 
-    fseek(f,(get_size_page()+4*get_size_record())*disk_block,SEEK_SET);
+    fseek(f,(get_size_page()+4*get_size_record()+ 4*sizeof(int))*disk_block,SEEK_SET);
     rec = getSlots(page);
     fread(page,get_size_page(),1,f);
     setSlots(rec,page);
     int i,*bitmap;
-    bitmap = get_bitmap(page);
-    if(!feof(f))
-        for(i=0; i<4;i++) {
-            fscanf(f,"%d", &bitmap[i]);
-            printf("%d\n", bitmap[i]);
-        }
 
+    if(diskSpaceManager->blocks_info[disk_block].is_free == 0) {
+        fread(bitmap, sizeof(int), 4, f);
+    } else {
+        bitmap = get_bitmap(page);
+        diskSpaceManager->blocks_info[disk_block].is_free = 0;
+    }
+
+
+
+    //bitmap = get_bitmap(page);
+    for(i=0;i<4;i++){
+        if(bitmap[i]==1){
+            bitmap[i]=0;
+            rc = recordNew();
+            fread(rc,get_size_record(),1,f);
+            inst_record(page,rc);
+        }
+        else{
+            fseek(f,get_size_record(),SEEK_CUR);
+        }
+    }
+
+    fclose(f);
+
+    return page;
+}*/
+
+/*int write_block(Page* page, int disk_block){
+    FILE *f;
+    f = fopen(ARQUIVO_DADOS, "ab");
+    fseek(f,get_size_page()*disk_block,SEEK_SET);
+    fwrite(page, get_size_page(),1,f);
+    fclose(f);
+    return 1;
+
+}*/
+/// Testes do Esdras Gato
+
+int write_block(Page* page, int disk_block){
+    FILE *f;
+    f = fopen(ARQUIVO_DADOS, "r+b");
+    fseek(f,(6*sizeof(int)+4*get_size_record())*disk_block,0);
+
+    int page_id, heap_id, *bitmap;
+    page_id = get_id(page);
+    heap_id = get_heap_id(page);
+    bitmap = get_bitmap(page);
+
+    fwrite(&page_id, sizeof(int),1,f);
+    fwrite(&heap_id, sizeof(int),1,f);
+    fwrite(bitmap, sizeof(int), 4, f);
+
+    int i;
+    struct record **aux_rc;
+    aux_rc = get_record(page);
+    for(i=0;i<4;i++){
+        if(aux_rc[i] != NULL){
+            fwrite(aux_rc[i],get_size_record(),1,f);
+        }
+        else{
+            fseek(f,get_size_record(),SEEK_CUR);
+        }
+    }
+    fclose(f);
+    return 1;
+}
+
+Page* read_block(int disk_block){
+    FILE *f;
+    Page* page;
+    Record* rc;
+    Record** rec;
+    f = fopen(ARQUIVO_DADOS,"rb");
+
+    int page_id, heap_id, *bitmap, i;
+    bitmap = (int*) malloc(4*sizeof(int));
+
+    //if(diskSpaceManager->blocks_info[disk_block].is_free == 0) {
+        fseek(f,(6*sizeof(int)+4*get_size_record())*disk_block,SEEK_SET);
+
+        fread(&page_id, sizeof(int), 1, f);
+        fread(&heap_id, sizeof(int), 1, f);
+        fread(bitmap, sizeof(int), 4, f);
+        page = pageNew(page_id, heap_id);
+
+     /*else {
+        page = pageNew();
+        bitmap = get_bitmap(page);
+        diskSpaceManager->blocks_info[disk_block].is_free = 0;
+        return page;
+    }*/
     for(i=0;i<4;i++){
         if(bitmap[i]==1){
             bitmap[i]=0;
@@ -112,29 +197,20 @@ Page* read_block(int disk_block){
     return page;
 }
 
+/// Fim dos testes
+
 /*int write_block(Page* page, int disk_block){
     FILE *f;
-    f = fopen(ARQUIVO_DADOS, "ab");
-    fseek(f,get_size_page()*disk_block,SEEK_SET);
-    fwrite(page, get_size_page(),1,f);
-    fclose(f);
-    return 1;
-
-}*/
-
-int write_block(Page* page, int disk_block){
-    FILE *f;
     f = fopen(ARQUIVO_DADOS, "r+b");
-    fseek(f,(get_size_page()+4*get_size_record())*disk_block,0);
+    fseek(f,(get_size_page()+4*get_size_record() + 4*sizeof(int))*disk_block,0);
     fwrite(page, get_size_page(),1,f);
     int i;
     struct record **aux_rc;
     aux_rc = get_record(page);
 
     int *bitmap = get_bitmap(page);
-    for(i=0; i<4; i++) {
-        fprintf(f, "%d", bitmap[i]);
-    }
+    fwrite(bitmap, sizeof(int), 4, f);
+
     for(i=0;i<4;i++){
         if(aux_rc[i] != NULL){
             fwrite(aux_rc[i],get_size_record(),1,f);
@@ -145,7 +221,7 @@ int write_block(Page* page, int disk_block){
     }
     fclose(f);
     return 1;
-}
+}*/
 
 /*int write_block(Page* page, int disk_block){
     FILE *f, *f1;

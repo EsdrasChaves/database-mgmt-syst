@@ -37,7 +37,97 @@ void printFile() {
     }
 }
 
+void search_by_id(int heap_id, int record_id) {
+    Heap_dictionary* hp_aux = HEAP;
+    Directory_pages* dp_aux = NULL;
+    Page* page;
+    int i = 0, *bitmap, flag = 0;
 
+    bitmap = (int*) malloc(get_num_slots() * sizeof(int));
+
+    while(hp_aux != NULL && hp_aux->heap_id != heap_id) {
+        hp_aux = hp_aux->next;
+    }
+    if(hp_aux != NULL) {
+        dp_aux = hp_aux->header_page;
+        while(dp_aux != NULL) {
+            page = read_page_record(hp_aux->heap_id, dp_aux->page_id);
+            if(page != NULL) {
+                bitmap = get_bitmap(page);
+                for(i=0; i < get_num_slots(); i++) {
+                    if(bitmap[i] == 1 && record_get_id(getSlot_by_Position(page, i)) == record_id) {
+                        imprimeInfo(getSlot_by_Position(page, i));
+                        flag = 1;
+                    }
+                }
+            }
+            dp_aux = dp_aux->next;
+        }
+    }
+
+    if(flag == 0)printf("Registro não encontrad0!\n");
+}
+
+void search_by_name(int heap_id, char *name) {
+    Heap_dictionary* hp_aux = HEAP;
+    Directory_pages* dp_aux = NULL;
+    Page* page;
+    int i = 0, *bitmap, flag = 0;
+
+    bitmap = (int*) malloc(get_num_slots() * sizeof(int));
+
+    while(hp_aux != NULL && hp_aux->heap_id != heap_id) {
+        hp_aux = hp_aux->next;
+    }
+    if(hp_aux != NULL) {
+        dp_aux = hp_aux->header_page;
+        while(dp_aux != NULL) {
+            page = read_page_record(hp_aux->heap_id, dp_aux->page_id);
+            if(page != NULL) {
+                bitmap = get_bitmap(page);
+                for(i=0; i < get_num_slots(); i++) {
+                    if(bitmap[i] == 1 && !strcmp(record_get_name(getSlot_by_Position(page, i)), name)) {
+                        imprimeInfo(getSlot_by_Position(page, i));
+                        flag = 1;
+                    }
+                }
+            }
+            dp_aux = dp_aux->next;
+        }
+    }
+
+    if(flag == 0)printf("Registro não encontrad0!\n");
+}
+
+void search_by_rid(int heap_id, int page_id, int record_id) {
+    Heap_dictionary* hp_aux = HEAP;
+    Directory_pages* dp_aux = NULL;
+    Page* page;
+    int i = 0, *bitmap, flag = 0;
+
+    bitmap = (int*) malloc(get_num_slots() * sizeof(int));
+
+    while(hp_aux != NULL && hp_aux->heap_id != heap_id) {
+        hp_aux = hp_aux->next;
+    }
+    if(hp_aux != NULL) {
+        dp_aux = hp_aux->header_page;
+        while(dp_aux != NULL) {
+            page = read_page_record(hp_aux->heap_id, dp_aux->page_id);
+            if(page != NULL && get_id(page) == page_id) {
+                bitmap = get_bitmap(page);
+                if(bitmap[record_id] == 1) {
+                    imprimeInfo(getSlot_by_Position(page, record_id));
+                    flag = 1;
+                }
+
+            }
+            dp_aux = dp_aux->next;
+        }
+    }
+
+    if(flag == 0)printf("Registro não encontrad0!\n");
+}
 
 int update_free_space(int heap_id, int page_id, int num_update) {
     Heap_dictionary* hp_aux = HEAP;
@@ -285,7 +375,7 @@ int fm_load() {
     return 1;
 }
 
-int get_free_page(int heap_id, int *disk_block) {
+int get_free_page(int heap_id, int *disk_block, int *page_new) {
     Heap_dictionary* hp_aux = HEAP;
     Directory_pages* pg_aux = NULL;
     int page_id_aux;
@@ -297,6 +387,7 @@ int get_free_page(int heap_id, int *disk_block) {
             while(pg_aux != NULL) {
                 if(pg_aux->free_space > 0) {
                     *disk_block = pg_aux->disk_block;
+                    *page_new = 0;
                     return pg_aux->page_id;
                 }
 
@@ -353,4 +444,5 @@ int cr8_page(int heap_id, int *disk_block) {
     }
     return -1;
 }
+
 

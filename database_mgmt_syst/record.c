@@ -32,9 +32,13 @@ void insereInfo(Record *rcd, int id, char name[10]) {
     strcpy(rcd->name, name);
 }
 void imprimeInfo(Record *rcd) {
-    printf("ID: %d\nNAME: %s\n", rcd->id, rcd->name);
+    printf("\nRegistro = ID: %d\nNAME: %s\n", rcd->id, rcd->name);
 }
 
 int record_get_id(Record* rcd) {
     return rcd->id;
+}
+
+char* record_get_name(Record* rcd) {
+    return rcd->name;
 }

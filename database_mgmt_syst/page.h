@@ -4,7 +4,7 @@
 typedef struct page Page;
 
 
-Page *pageNew();
+Page *pageNew(int id, int heap_id);
 
 // Insere registro na página e atualiza bitmap
 int inst_record(Page *pg,Record *record);
@@ -24,3 +24,13 @@ int get_id(Page* page);
 void imprimeRecords(Page *page);
 Record** getSlots(Page *p);
 void setSlots(Record **rec,Page *p);
+
+Record* getSlot_by_Position(Page* p, int slot_position);
+
+
+/// Testes do Esdras Gato
+int get_heap_id(Page* page);
+
+int get_num_slots();
+
+/// Fim dos testes

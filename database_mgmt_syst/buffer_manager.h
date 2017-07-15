@@ -15,7 +15,7 @@ int  bf_init(/*int num_frames*/);
 // Inserção de um novo registro na página
 int cr8_record(Record* rcd, int heap_id);
 
-
+Page* read_page_record(int heap_id, int page_id);
 
 
 // Adiciona página na memoria a partir do seu endereço. Atraves de métodos do dsm
@@ -55,4 +55,4 @@ int req_record_page(int heap_file_id, int page_id, int chave);
 // Retorna numero do slot do registro buscado com a página desconhecida
 int req_record(Page* page, int chave);
 
-void bufferpool_persist();
+void bufferpool_persist ();

@@ -6,11 +6,16 @@
 #include "disk_space_manager.h"
 
 void init() {
-    initHeap();
     bf_init();
+    initHeap();
     newDiskSpaceManager();
 }
 
+void close() {
+    bufferpool_persist();
+    dsm_save();
+    fm_save();
+}
 
 void imprime_boasVindas() {
     printf(" ---------------------------------------------------------\n");
@@ -38,17 +43,20 @@ void imprime_menu() {
     printf("2 - Inserir registro na tabela\n");
     printf("3 - Remover registro da tabela\n");
     printf("4 - Atualizar registro\n");
-    ///printf("5 - Buscar registro pelo \n");
-    printf("5 - Imprimir paginas presentes na memoria\n");
+    printf("5 - Buscar registro pelo ID\n");
+    printf("6 - Buscar registro pelo Nome\n");
+    printf("7 - Buscar registro pelo RID\n");
+    printf("8 - Imprimir paginas presentes na memoria\n");
     printf("0 - Sair\n");
     printf("\n\nEscolha: ");
 
 }
 
-int main(){
+int main()
+{
 
 
-    int escolha = -1, heap, id, page_id, id_aux;
+    int escolha = -1, heap, id, page_id, record_id, id_aux;
     char nome[10];
     Record* rcd;
 
@@ -67,13 +75,7 @@ int main(){
             case 0:
                 system("clear");
                 printFile();
-                printf("Pressione qualquer enter para sair\n");
-                getchar();
-                printf("Zegzo");
-                bufferpool_persist();
-                dsm_save();
-                printf("ola");
-                fm_save();
+                close();
                 break;
             case 1:
                 heap = cr8_heapfile();
@@ -135,6 +137,30 @@ int main(){
                 system("clear");
                 break;
             case 5:
+                printf("Digite o Heap ID da tabela: ");
+                scanf("%d", &heap);
+                printf("Digite o ID da tupla: ");
+                scanf("%d", &record_id);
+                search_by_id(heap, record_id);
+                break;
+            case 6:
+                printf("Digite o Heap ID da tabela: ");
+                scanf("%d", &heap);
+                getchar();
+                printf("Digite o nome da tupla: ");
+                fgets(nome, 10, stdin);
+                search_by_name(heap, nome);
+                break;
+            case 7:
+                printf("Digite o Heap ID da tabela: ");
+                scanf("%d", &heap);
+                printf("Digite o ID da pagina: ");
+                scanf("%d", &page_id);
+                printf("Digite o ID da tupla: ");
+                scanf("%d", &record_id);
+                search_by_rid(heap, page_id, record_id);
+                break;
+            case 8:
                 system("clear");
                 printMem();
                 getchar();

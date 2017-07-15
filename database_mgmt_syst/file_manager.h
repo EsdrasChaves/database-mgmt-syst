@@ -19,9 +19,6 @@ int update_free_space(int heap_id, int page_id, int num_update);
 /// Criar nova tabela
 int cr8_heapfile();
 
-/// Salva as informações do file manager
-int fm_save();
-
 /// Carrega informações do file manager
 int fm_load(void);
 
@@ -29,8 +26,9 @@ int fm_load(void);
  * Além de atualizar free_space etc. Considera que ela é chamada somente
  * quando for escrever
  */
-int get_free_page(int heap_id, int *disk_block);
+int get_free_page(int heap_id, int *disk_block, int *page_new);
 
+void search_by_id(int heap_id, int record_id);
 
 /* Pede para o dsm alocar espaço e retorna o id para a função freepage() chama
  * função de adicionar página no heapfile e chama cr8 page directory

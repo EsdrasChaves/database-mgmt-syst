@@ -109,13 +109,16 @@ Frame_info* check_memory_space() {
 
 // Verifica se a página ja está na memória, senão ela faz o fetch (Página retornada pelo free_page())
 Frame_info* check_page(int heap_id, int page_id) {
-    int i, page_id_gtn, page_disk_block, index_page_free = -1;
+    int i, page_id_gtn, page_disk_block, index_page_free = -1, page_new = 1;
     Frame_info* frameAux;
+    Page* page = NULL;
 
 
-    if(page_id == -1)
-        page_id = get_free_page(heap_id, &page_disk_block);
-    else
+    if(page_id == -1){
+        page_id = get_free_page(heap_id, &page_disk_block, &page_new);
+        if(page_new == 1)
+            page = pageNew(page_id, heap_id);
+    }else
         page_disk_block = fetch_page(heap_id, page_id);
 
 
@@ -135,7 +138,7 @@ Frame_info* check_page(int heap_id, int page_id) {
     else
         frameAux = &(bufferpool_manager->frame_info[index_page_free]);
     if(frameAux != NULL) {
-        add_page_memory(frameAux, page_disk_block);
+        add_page_memory(frameAux, page_disk_block, page);
         return frameAux;
     } else {
         return NULL;
@@ -166,12 +169,13 @@ int cr8_record(Record* rcd, int heap_id) {
 }
 
 // Adiciona página na memoria a partir do seu endereço. Atraves de métodos do dsm
-int add_page_memory(Frame_info* frameAux, int disk_block) {
+int add_page_memory(Frame_info* frameAux, int disk_block, Page* page) {
     // Método de buscar na memória
-    Page* pageAux = read_block(disk_block);
+    if(page == NULL)
+        page = read_block(disk_block);
 
     if(frameAux != NULL){
-        *(frameAux->frame) = pageAux;
+        *(frameAux->frame) = page;
         frameAux->disk_block = disk_block;
         return 1;
     }else {
@@ -231,6 +235,19 @@ int read_page(int heap_file_id, int page_id) {
 
     imprime_bitmap(frameAux->frame);
     return 0;
+}
+
+
+Page* read_page_record(int heap_id, int page_id) {
+    Frame_info* frameAux;
+
+    frameAux = check_page(heap_id, page_id);
+
+    if(frameAux != NULL) {
+        return *(frameAux->frame);
+    }
+
+    return NULL;
 }
 
 int update_record(int heap_file_id, int page_id, int chave, Record* record) {

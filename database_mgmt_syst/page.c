@@ -21,20 +21,18 @@ Record **get_record(Page *pg){
 Page *pageNew(int id, int heap_id) {
     Page *pg = (Page*) malloc(sizeof(Page));
     pg->slots = (Record**)malloc(NUM_SLOTS*sizeof(Record*));
-
-
-    int i;
-    for(i=0;i<NUM_SLOTS; i++)
-        pg->slots[i] = NULL;
-
-
     pg->bitmap_slots = (int*) calloc(NUM_SLOTS,sizeof(int));
     pg->num_slots = NUM_SLOTS;
     pg->id = id;
     pg->heap_id = heap_id;
 
-    return pg;
+    /// Teste
 
+    int i;
+    for(i=0; i < 4; i++)
+        pg->slots[i] = NULL;
+
+    return pg;
 }
 
 
@@ -82,6 +80,18 @@ int get_id(Page *page){
     return  page->id;
 }
 
+/// Testes do Esdras Gato
+
+int get_heap_id(Page* page) {
+    return page->heap_id;
+}
+
+int get_num_slots() {
+    return NUM_SLOTS;
+}
+
+/// Fim dos testes
+
 int num_slot_key(Page* pg, int chave) {
     int i;
 
@@ -107,4 +117,8 @@ Record** getSlots(Page *p){
 }
 void setSlots(Record **rec,Page *p){
     p->slots = rec;
+}
+
+Record* getSlot_by_Position(Page* p, int slot_position) {
+    return p->slots[slot_position];
 }
